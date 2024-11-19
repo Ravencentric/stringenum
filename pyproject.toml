@@ -50,13 +50,13 @@ exclude = "tests/"
 
 [tool.coverage.run]
 omit = [
+    "src/stringenum/_compat.py",
     "tests/*"
 ]
 
 [tool.coverage.report]
 exclude_also = [
     "if TYPE_CHECKING:", # Only used for type-hints
-    "if sys.version_info" # Tested by CI
 ]
 
 [build-system]
