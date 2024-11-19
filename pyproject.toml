@@ -1,0 +1,64 @@
+[project]
+name = "stringenum"
+version = "0.1.0"
+description = "A small, dependency-free library that provides additional subclasses of enum.StrEnum"
+authors = [{ name = "Ravencentric", email = "me@ravencentric.cc" }]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+keywords = ["enum", "strenum"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "coverage>=7.6.7",
+    "mypy>=1.13.0",
+    "pytest>=8.3.3",
+    "ruff>=0.7.4",
+    "tomli>=2.1.0",
+    "typing-extensions>=4.12.2",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["I", "RUF", "UP", "N", "D4"]
+fixable = ["ALL"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/*" = ["D"]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
+
+[tool.mypy]
+strict = true
+pretty = true
+enable_error_code = ["ignore-without-code"]
+exclude = "tests/"
+
+[tool.coverage.run]
+omit = [
+    "tests/*"
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:", # Only used for type-hints
+    "if sys.version_info" # Tested by CI
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  tests:
+    name: Tests
+    uses: ./.github/workflows/tests.yml
+  lint:
+    name: Lint
+    uses: ./.github/workflows/lint-and-type-check.yml
+  release:
+    name: Release
+    needs: [tests, lint]
+    environment:
+      name: release
+      url: https://pypi.org/project/stringenum/
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Important for changelog
+
+      - name: Install uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install Python 3.12
+        run: uv python install 3.12
+
+      - name: Build
+        run: |
+          uv build
+          rm dist/.gitignore
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: "dist/*"
+
+      - name: Generate changelog with git-cliff
+        uses: tj-actions/git-cliff@v1
+        with:
+          args: --latest --strip all
+          template-config: .github/cliff-template.toml
+          output: "CHANGELOG.md"
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          bodyFile: "CHANGELOG.md"
+          draft: false
+          prerelease: false
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
