@@ -35,6 +35,8 @@ pip install stringenum
 
 # Usage
 
+- `stringenum.StrEnum` - Identical to [`enum.StrEnum`](https://docs.python.org/3/library/enum.html#enum.StrEnum).
+
 - `stringenum.CaseInsensitiveStrEnum` - A subclass of `StrEnum` that supports case-insensitive lookup.
 
     ```py
