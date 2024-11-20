@@ -57,7 +57,7 @@ pip install stringenum
     <Pet.DOG: 'bark'>
     ```
 
-- `stringenum.DoubleSidedStrEnum` - A subclass of `StrEnum` that supports double-sided lookup, allowing both member values and member names to be used for lookups. It also ensures that each member has a unique value.
+- `stringenum.DoubleSidedStrEnum` - A subclass of `StrEnum` that supports double-sided lookup, allowing both member values and member names to be used for lookups.
 
     ```py
     >>> class Status(DoubleSidedStrEnum):
@@ -76,8 +76,20 @@ pip install stringenum
     >>> Status["denied"]
     <Status.REJECTED: 'denied'>
     ```
+    Note that `DoubleSidedStrEnum` also does not allow duplicate values.
+    ```
+    >>> class Fruits(DoubleSidedStrEnum):
+    ...     APPLE = "apple"
+    ...     BANANA = "banana"
+    ...     ORANGE = "apple"
+    ...
+    Traceback (most recent call last):
+      ...
+    ValueError: Duplicate values are not allowed in Fruits: <Fruits.ORANGE: 'apple'>
+    ```
 
-- `stringenum.DoubleSidedCaseInsensitiveStrEnum` - A subclass of `StrEnum` that supports case-insenitive double-sided lookup, allowing both member values and member names to be used for lookups. It also ensures that each member has a unique value.
+
+- `stringenum.DoubleSidedCaseInsensitiveStrEnum` - A subclass of `StrEnum` that supports case-insenitive double-sided lookup, allowing both member values and member names to be used for lookups.
 
     ```py
     >>> class Status(DoubleSidedCaseInsensitiveStrEnum):
@@ -95,6 +107,17 @@ pip install stringenum
 
     >>> Status["DenieD"]
     <Status.REJECTED: 'denied'>
+    ```
+    Note that `DoubleSidedCaseInsensitiveStrEnum` also does not allow duplicate values.
+    ```
+    >>> class Fruits(DoubleSidedCaseInsensitiveStrEnum):
+    ...     APPLE = "apple"
+    ...     BANANA = "banana"
+    ...     ORANGE = "apple"
+    ...
+    Traceback (most recent call last):
+      ...
+    ValueError: Duplicate values are not allowed in Fruits: <Fruits.ORANGE: 'apple'>
     ```
 
 ## License

@@ -64,3 +64,12 @@ def test_unique_values():
             RED_COLOR = "Red"
             BLUE_SKY = "Blue"
             BLUE_DUPLICATE = "Blue"
+
+
+def test_unique_values_case_insensitively():
+    with pytest.raises(ValueError):
+
+        class InvalidColor(DoubleSidedStrEnum):
+            RED_COLOR = "Red"
+            BLUE_SKY = "Blue"
+            BLUE_DUPLICATE = "blue"

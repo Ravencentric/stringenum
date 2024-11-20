@@ -34,6 +34,14 @@ class CaseInsensitiveStrEnum(StrEnum, metaclass=_CaseInsensitiveGetItem):
         raise ValueError(msg)
 
 
+class _DuplicateFreeStrEnum(StrEnum):
+    def __init__(self, *args: object) -> None:
+        cls = self.__class__
+        if any(self.value.casefold() == member.value.casefold() for member in cls):
+            msg = f"Duplicate values are not allowed in {self.__class__.__name__}: {self!r}"
+            raise ValueError(msg)
+
+
 class _DoubleSidedGetItem(EnumType):
     def __getitem__(self, name: str) -> Self:  # type: ignore[explicit-override, misc, override]
         if not isinstance(name, str):
@@ -45,20 +53,12 @@ class _DoubleSidedGetItem(EnumType):
         raise KeyError(name)
 
 
-class DoubleSidedStrEnum(StrEnum, metaclass=_DoubleSidedGetItem):
+class DoubleSidedStrEnum(_DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItem):
     """
     A subclass of `StrEnum` that supports double-sided lookup, allowing
     both member values and member names to be used for lookups.
     It also ensures that each member has a unique value.
     """
-
-    def __init__(self, *args: object) -> None:
-        cls = self.__class__
-        if any(self.value == member.value for member in cls):
-            a = self.name
-            e = cls(self.value).name
-            msg = f"Aliases not allowed in {self.__class__.__name__}:  {a!r} --> {e!r}"
-            raise ValueError(msg)
 
     @classmethod
     def _missing_(cls, value: object) -> Self:
@@ -83,20 +83,12 @@ class _DoubleSidedCaseInsensitiveGetItem(EnumType):
         raise KeyError(name)
 
 
-class DoubleSidedCaseInsensitiveStrEnum(StrEnum, metaclass=_DoubleSidedCaseInsensitiveGetItem):
+class DoubleSidedCaseInsensitiveStrEnum(_DuplicateFreeStrEnum, metaclass=_DoubleSidedCaseInsensitiveGetItem):
     """
     A subclass of `StrEnum` that supports case-insenitive double-sided lookup,
     allowing both member values and member names to be used for lookups.
     It also ensures that each member has a unique value.
     """
-
-    def __init__(self, *args: object) -> None:
-        cls = self.__class__
-        if any(self.value == member.value for member in cls):
-            a = self.name
-            e = cls(self.value).name
-            msg = f"Aliases not allowed in {self.__class__.__name__}:  {a!r} --> {e!r}"
-            raise ValueError(msg)
 
     @classmethod
     def _missing_(cls, value: object) -> Self:
