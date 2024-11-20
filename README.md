@@ -77,7 +77,7 @@ pip install stringenum
     <Status.REJECTED: 'denied'>
     ```
     Note that `DoubleSidedStrEnum` also does not allow duplicate values.
-    ```
+    ```py
     >>> class Fruits(DoubleSidedStrEnum):
     ...     APPLE = "apple"
     ...     BANANA = "banana"
@@ -109,7 +109,7 @@ pip install stringenum
     <Status.REJECTED: 'denied'>
     ```
     Note that `DoubleSidedCaseInsensitiveStrEnum` also does not allow duplicate values.
-    ```
+    ```py
     >>> class Fruits(DoubleSidedCaseInsensitiveStrEnum):
     ...     APPLE = "apple"
     ...     BANANA = "banana"
