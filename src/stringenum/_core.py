@@ -5,17 +5,21 @@ from typing import TYPE_CHECKING
 from stringenum._compat import EnumType, StrEnum
 
 if TYPE_CHECKING:
+    from typing import TypeVar
+
     from typing_extensions import Self
+
+    T = TypeVar("T", bound=EnumType)
 
 
 class _CaseInsensitiveGetItem(EnumType):
-    def __getitem__(self, name: str) -> Self:  # type: ignore[explicit-override, misc, override]
+    def __getitem__(self: type[T], name: str) -> T:  # type: ignore[misc]
         if not isinstance(name, str):
             raise KeyError(name)
 
-        for key, value in super().__dict__["_member_map_"].items():
+        for key, value in self._member_map_.items():
             if key.casefold() == name.casefold():
-                return value  # type: ignore[no-any-return]
+                return value  # type: ignore[return-value]
         raise KeyError(name)
 
 
@@ -43,13 +47,13 @@ class _DuplicateFreeStrEnum(StrEnum):
 
 
 class _DoubleSidedGetItem(EnumType):
-    def __getitem__(self, name: str) -> Self:  # type: ignore[explicit-override, misc, override]
+    def __getitem__(self: type[T], name: str) -> T:  # type: ignore[misc]
         if not isinstance(name, str):
             raise KeyError(name)
 
-        for key, member in super().__dict__["_member_map_"].items():
+        for key, member in self._member_map_.items():
             if (key == name) or (member.value == name):
-                return member  # type: ignore[no-any-return]
+                return member  # type: ignore[return-value]
         raise KeyError(name)
 
 
@@ -73,13 +77,13 @@ class DoubleSidedStrEnum(_DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItem):
 
 
 class _DoubleSidedCaseInsensitiveGetItem(EnumType):
-    def __getitem__(self, name: str) -> Self:  # type: ignore[explicit-override, misc, override]
+    def __getitem__(self: type[T], name: str) -> T:  # type: ignore[misc]
         if not isinstance(name, str):
             raise KeyError(name)
 
-        for key, member in super().__dict__["_member_map_"].items():
+        for key, member in self._member_map_.items():
             if (key.casefold() == name.casefold()) or (member.value.casefold() == name.casefold()):
-                return member  # type: ignore[no-any-return]
+                return member  # type: ignore[return-value]
         raise KeyError(name)
 
 
