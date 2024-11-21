@@ -23,7 +23,7 @@
 
 # About
 
-A small, dependency-free library that provides additional subclasses of [enum.StrEnum](https://docs.python.org/3/library/enum.html#enum.StrEnum).
+A small, dependency-free library offering additional [enum.StrEnum](https://docs.python.org/3/library/enum.html#enum.StrEnum) subclasses and a backport for older Python versions.
 
 ## Installation
 
