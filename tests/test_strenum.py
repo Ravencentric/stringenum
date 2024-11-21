@@ -33,10 +33,13 @@ def test_color_values():
     assert Color.BLUE.value == "blue"
 
 
-def test_color__str__():
-    assert f"{Color.RED}" == "red"
-    assert f"{Color.GREEN}" == "green"
-    assert f"{Color.BLUE}" == "blue"
+def test___str__():
+    class Pet(StrEnum):
+        CAT = "meow"
+        DOG = "bark"
+
+    assert str(Pet.CAT) == f"{Pet.CAT}" == "meow"
+    assert str(Pet.DOG) == f"{Pet.DOG}" == "bark"
 
 
 def test_color_name():
