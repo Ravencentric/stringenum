@@ -19,6 +19,9 @@ classifiers = [
 ]
 dependencies = []
 
+[project.urls]
+Repository = "https://github.com/Ravencentric/stringenum"
+
 [dependency-groups]
 dev = [
     "coverage>=7.6.7",
