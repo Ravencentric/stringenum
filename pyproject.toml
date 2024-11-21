@@ -53,7 +53,6 @@ exclude = "tests/"
 
 [tool.coverage.run]
 omit = [
-    "src/stringenum/_compat.py",
     "tests/*"
 ]
 

@@ -35,7 +35,60 @@ pip install stringenum
 
 # Usage
 
-- `stringenum.StrEnum` - Identical to [`enum.StrEnum`](https://docs.python.org/3/library/enum.html#enum.StrEnum).
+- `stringenum.StrEnum` - A backport of [`enum.StrEnum`](https://docs.python.org/3/library/enum.html#enum.StrEnum). While `StrEnum` was added in Python 3.11, version 3.12 brought changes to the `__contains__` method in `EnumType`, which also impacts `StrEnum`. `stringenum.StrEnum` includes this `__contains__` update from Python 3.12.
+
+  - `enum.StrEnum` on Python <=3.11
+    ```py
+    >>> import enum
+    >>> class Color(enum.StrEnum):
+    ...     RED = "RED"
+    ...     GREEN = "GREEN"
+    ...     BLUE = "BLUE"
+
+    >>> Color.RED in Color
+    True
+
+    >>> "RED" in Color
+    Traceback (most recent call last):
+      ...
+    TypeError: unsupported operand type(s) for 'in': 'str' and 'EnumType'
+    ```
+
+  - `enum.StrEnum` on Python >=3.12
+    ```py
+    >>> import enum
+    >>> class Color(enum.StrEnum):
+    ...     RED = "RED"
+    ...     GREEN = "GREEN"
+    ...     BLUE = "BLUE"
+
+    >>> Color.RED in Color
+    True
+
+    >>> "RED" in Color
+    True
+
+    >>> 12 in Color
+    False
+    ```
+
+  - `stringenum.StrEnum` on Python >=3.9
+    ```py
+    >>> import enum
+    >>> class Color(enum.StrEnum):
+    ...     RED = "RED"
+    ...     GREEN = "GREEN"
+    ...     BLUE = "BLUE"
+
+    >>> Color.RED in Color
+    True
+
+    >>> "RED" in Color
+    True
+
+    >>> 12 in Color
+    False
+    ```
 
 - `stringenum.CaseInsensitiveStrEnum` - A subclass of `StrEnum` that supports case-insensitive lookup.
 

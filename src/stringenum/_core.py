@@ -40,9 +40,10 @@ class CaseInsensitiveStrEnum(StrEnum, metaclass=_CaseInsensitiveGetItem):
 
 class DuplicateFreeStrEnum(StrEnum):
     """
-    A subclass of `StrEnum` that ensures all members have unique values and names, 
+    A subclass of `StrEnum` that ensures all members have unique values and names,
     raising a `ValueError` if duplicates are found.
     """
+
     def __init__(self, *args: object) -> None:
         cls = self.__class__
 
@@ -56,7 +57,16 @@ class DuplicateFreeStrEnum(StrEnum):
                 raise ValueError(msg)
 
 
-class _DoubleSidedGetItem(EnumType):
+class _DoubleSidedGetItemAndContains(EnumType):
+    def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
+        if isinstance(value, self):
+            return True
+        if isinstance(value, str):
+            return value in self._value2member_map_ or any(
+                value == member.name for member in self._value2member_map_.values()
+            )
+        return False
+
     def __getitem__(self: type[T], name: str) -> T:  # type: ignore[misc]
         if not isinstance(name, str):
             raise KeyError(name)
@@ -67,7 +77,7 @@ class _DoubleSidedGetItem(EnumType):
         raise KeyError(name)
 
 
-class DoubleSidedStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItem):
+class DoubleSidedStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItemAndContains):
     """
     A subclass of `DuplicateFreeStrEnum` that supports double-sided lookup, allowing
     both member values and member names to be used for lookups.
@@ -85,7 +95,16 @@ class DoubleSidedStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItem):
         raise ValueError(msg)
 
 
-class _DoubleSidedCaseInsensitiveGetItem(EnumType):
+class _DoubleSidedCaseInsensitiveGetItemAndContains(EnumType):
+    def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
+        if isinstance(value, self):
+            return True
+        if isinstance(value, str):
+            for name, member in self.__members__.items():  # type: ignore[attr-defined]
+                if (value.casefold() == name.casefold()) or (member.value.casefold() == member.value.casefold()):
+                    return True
+        return False
+
     def __getitem__(self: type[T], name: str) -> T:  # type: ignore[misc]
         if not isinstance(name, str):
             raise KeyError(name)
@@ -96,7 +115,7 @@ class _DoubleSidedCaseInsensitiveGetItem(EnumType):
         raise KeyError(name)
 
 
-class DoubleSidedCaseInsensitiveStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedCaseInsensitiveGetItem):
+class DoubleSidedCaseInsensitiveStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedCaseInsensitiveGetItemAndContains):
     """
     A subclass of `DuplicateFreeStrEnum` that supports case-insenitive double-sided lookup,
     allowing both member values and member names to be used for lookups.

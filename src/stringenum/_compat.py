@@ -1,20 +1,32 @@
 from __future__ import annotations
 
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from typing_extensions import Self
 
-if sys.version_info >= (3, 11):
+if sys.version_info >= (3, 12):  # pragma: no cover
     from enum import EnumType, StrEnum
 else:
-    from enum import Enum
-    from enum import EnumMeta as EnumType
+    from enum import Enum, EnumMeta
 
-    # Copy of StrEnum for Python < 3.11
-    # https://github.com/python/cpython/blob/bb98a0afd8598ce80f0e6d3f768b128eab68f40a/Lib/enum.py#L1351-L1382
-    class StrEnum(str, Enum):
+    class EnumType(EnumMeta):
+        # __contains__ was updated in 3.12 to no longer raise TypeError
+        # https://docs.python.org/3/library/enum.html#enum.EnumType.__contains__
+        # https://github.com/python/cpython/blob/09c240f20c47db126ad7e162df41e5c2596962d4/Lib/enum.py#L736-L751
+        # The implementation isn't identical to stdlib's because we only care about StrEnum(s) so it's a gurantee
+        # our values will either be either be an instance of the StrEnum or a string value.
+        # Despite that, it should be functionally the same for StrEnum.
+        def __contains__(cls: type[Any], value: object) -> bool:
+            if isinstance(value, cls):
+                return True
+            if isinstance(value, str):
+                return value in cls._value2member_map_
+            return False
+
+    # https://github.com/python/cpython/blob/09c240f20c47db126ad7e162df41e5c2596962d4/Lib/enum.py#L1352-L1383
+    class StrEnum(str, Enum, metaclass=EnumType):
         """Enum where members are also (and must be) strings."""
 
         def __new__(cls, *values: str) -> Self:
@@ -37,6 +49,9 @@ else:
             member = str.__new__(cls, value)
             member._value_ = value
             return member
+
+        def __str__(self) -> str:
+            return str(self.value)
 
         @staticmethod
         def _generate_next_value_(name: str, start: int, count: int, last_values: list[str]) -> str:

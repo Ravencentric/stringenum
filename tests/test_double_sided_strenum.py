@@ -23,6 +23,17 @@ def test_getitem_by_value():
     assert Color["Green"] is Color.GREEN_GRASS
 
 
+def test_membership():
+    assert Color.RED_COLOR in Color
+    assert "Red" in Color
+    assert "red" not in Color
+    assert "GREEN_GRASS" in Color
+    assert "GREEN_grass" not in Color
+    assert None not in Color
+    assert object() not in Color
+    assert 121212 not in Color
+
+
 def test_getitem_invalid_key():
     with pytest.raises(KeyError):
         Color["YELLOW"]
