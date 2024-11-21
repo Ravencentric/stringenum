@@ -57,7 +57,20 @@ pip install stringenum
     <Pet.DOG: 'bark'>
     ```
 
-- `stringenum.DoubleSidedStrEnum` - A subclass of `StrEnum` that supports double-sided lookup, allowing both member values and member names to be used for lookups.
+- `stringenum.DuplicateFreeStrEnum` - A subclass of `StrEnum` that ensures all members have unique values and names, raising a `ValueError` if duplicates are found.
+
+    ```py
+    >>> class Fruits(DuplicateFreeStrEnum):
+    ...     APPLE = "apple"
+    ...     BANANA = "banana"
+    ...     ORANGE = "apple"
+    ...
+    Traceback (most recent call last):
+      ...
+    ValueError: Duplicate values are not allowed in Fruits: <Fruits.ORANGE: 'apple'>
+    ```
+
+- `stringenum.DoubleSidedStrEnum` - A subclass of `DuplicateFreeStrEnum` that supports double-sided lookup, allowing both member values and member names to be used for lookups.
 
     ```py
     >>> class Status(DoubleSidedStrEnum):
@@ -76,20 +89,8 @@ pip install stringenum
     >>> Status["denied"]
     <Status.REJECTED: 'denied'>
     ```
-    Note that `DoubleSidedStrEnum` also does not allow duplicate values.
-    ```py
-    >>> class Fruits(DoubleSidedStrEnum):
-    ...     APPLE = "apple"
-    ...     BANANA = "banana"
-    ...     ORANGE = "apple"
-    ...
-    Traceback (most recent call last):
-      ...
-    ValueError: Duplicate values are not allowed in Fruits: <Fruits.ORANGE: 'apple'>
-    ```
 
-
-- `stringenum.DoubleSidedCaseInsensitiveStrEnum` - A subclass of `StrEnum` that supports case-insenitive double-sided lookup, allowing both member values and member names to be used for lookups.
+- `stringenum.DoubleSidedCaseInsensitiveStrEnum` - A subclass of `DuplicateFreeStrEnum` that supports case-insenitive double-sided lookup, allowing both member values and member names to be used for lookups.
 
     ```py
     >>> class Status(DoubleSidedCaseInsensitiveStrEnum):
@@ -107,17 +108,6 @@ pip install stringenum
 
     >>> Status["DenieD"]
     <Status.REJECTED: 'denied'>
-    ```
-    Note that `DoubleSidedCaseInsensitiveStrEnum` also does not allow duplicate values.
-    ```py
-    >>> class Fruits(DoubleSidedCaseInsensitiveStrEnum):
-    ...     APPLE = "apple"
-    ...     BANANA = "banana"
-    ...     ORANGE = "apple"
-    ...
-    Traceback (most recent call last):
-      ...
-    ValueError: Duplicate values are not allowed in Fruits: <Fruits.ORANGE: 'apple'>
     ```
 
 ## License

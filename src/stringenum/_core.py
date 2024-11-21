@@ -38,12 +38,22 @@ class CaseInsensitiveStrEnum(StrEnum, metaclass=_CaseInsensitiveGetItem):
         raise ValueError(msg)
 
 
-class _DuplicateFreeStrEnum(StrEnum):
+class DuplicateFreeStrEnum(StrEnum):
+    """
+    A subclass of `StrEnum` that ensures all members have unique values and names, 
+    raising a `ValueError` if duplicates are found.
+    """
     def __init__(self, *args: object) -> None:
         cls = self.__class__
-        if any(self.value.casefold() == member.value.casefold() for member in cls):
-            msg = f"Duplicate values are not allowed in {self.__class__.__name__}: {self!r}"
-            raise ValueError(msg)
+
+        for member in cls:
+            if self.value.casefold() == member.value.casefold():
+                msg = f"Duplicate values are not allowed in {self.__class__.__name__}: {self!r}"
+                raise ValueError(msg)
+
+            if self.name.casefold() == member.name.casefold():
+                msg = f"Duplicate names are not allowed in {self.__class__.__name__}: {self!r}"
+                raise ValueError(msg)
 
 
 class _DoubleSidedGetItem(EnumType):
@@ -57,11 +67,10 @@ class _DoubleSidedGetItem(EnumType):
         raise KeyError(name)
 
 
-class DoubleSidedStrEnum(_DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItem):
+class DoubleSidedStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItem):
     """
-    A subclass of `StrEnum` that supports double-sided lookup, allowing
+    A subclass of `DuplicateFreeStrEnum` that supports double-sided lookup, allowing
     both member values and member names to be used for lookups.
-    It also ensures that each member has a unique value.
     """
 
     @classmethod
@@ -87,11 +96,10 @@ class _DoubleSidedCaseInsensitiveGetItem(EnumType):
         raise KeyError(name)
 
 
-class DoubleSidedCaseInsensitiveStrEnum(_DuplicateFreeStrEnum, metaclass=_DoubleSidedCaseInsensitiveGetItem):
+class DoubleSidedCaseInsensitiveStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedCaseInsensitiveGetItem):
     """
-    A subclass of `StrEnum` that supports case-insenitive double-sided lookup,
+    A subclass of `DuplicateFreeStrEnum` that supports case-insenitive double-sided lookup,
     allowing both member values and member names to be used for lookups.
-    It also ensures that each member has a unique value.
     """
 
     @classmethod

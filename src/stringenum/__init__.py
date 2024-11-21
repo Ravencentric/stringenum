@@ -1,14 +1,20 @@
 from __future__ import annotations
 
 from stringenum._compat import StrEnum
-from stringenum._core import CaseInsensitiveStrEnum, DoubleSidedCaseInsensitiveStrEnum, DoubleSidedStrEnum
+from stringenum._core import (
+    CaseInsensitiveStrEnum,
+    DoubleSidedCaseInsensitiveStrEnum,
+    DoubleSidedStrEnum,
+    DuplicateFreeStrEnum,
+)
 
 __version__ = "0.2.0"
 
 __all__ = (
     "StrEnum",
     "CaseInsensitiveStrEnum",
-    "DoubleSidedStrEnum",
     "DoubleSidedCaseInsensitiveStrEnum",
+    "DoubleSidedStrEnum",
+    "DuplicateFreeStrEnum",
     "__version__",
 )

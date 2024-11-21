@@ -95,3 +95,21 @@ def test_unique_values_case_insensitively():
             RED_COLOR = "Red"
             BLUE_SKY = "Blue"
             BLUE_DUPLICATE = "blue"
+
+
+def test_unique_names():
+    with pytest.raises(TypeError):
+
+        class InvalidColor(DoubleSidedCaseInsensitiveStrEnum):
+            RED = "Red"
+            BLUE = "Blue"
+            BLUE = "Green"
+
+
+def test_unique_names_case_insensitively():
+    with pytest.raises(ValueError):
+
+        class InvalidColor(DoubleSidedCaseInsensitiveStrEnum):
+            RED = "Red"
+            BLUE = "Blue"
+            blue = "Green"
