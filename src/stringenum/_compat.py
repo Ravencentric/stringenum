@@ -51,7 +51,7 @@ else:
             return member
 
         def __str__(self) -> str:
-            return str(self.value)
+            return self.value # type: ignore[no-any-return]
 
         @staticmethod
         def _generate_next_value_(name: str, start: int, count: int, last_values: list[str]) -> str:
