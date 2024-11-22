@@ -27,12 +27,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  tests:
     name: Tests
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.9', '3.13']
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -46,12 +46,7 @@ jobs:
         run: uv sync --python ${{ matrix.python-version }}
 
       - name: Run tests and generate coverage
-        run: |
-          uv run coverage run -m pytest -vv
-          uv run coverage xml
-
-      - name: Show coverage report
-        run: uv run coverage report -m
+        run: uv run coverage run --parallel-mode -m pytest -vv
 
       - name: Build
         run: uv build
@@ -59,11 +54,47 @@ jobs:
       - name: Get version
         id: version
         run: echo "version=$(uv run python -c 'import stringenum; print(stringenum.__version__)')" >> $GITHUB_OUTPUT
+      
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage.${{ matrix.python-version }}
+          path: .coverage*
+          include-hidden-files: true
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
         with:
           name: stringenum-${{ steps.version.outputs.version }}-py${{ matrix.python-version }}
           path: "dist/*"
+
+  coverage:
+    needs: [tests]
+    name: Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install the project dependencies
+        run: uv sync --python 3.12
+
+      - name: Download coverage data
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage.*
+          path: cov
+          merge-multiple: true
+
+      - name: Combine
+        run: uv run coverage combine cov/
+
+      - name: Generate report
+        run: uv run coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
