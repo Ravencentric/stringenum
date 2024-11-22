@@ -13,6 +13,13 @@ if TYPE_CHECKING:
 
 
 class _CaseInsensitiveGetItem(EnumType):
+    def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
+        if isinstance(value, self):
+            return True
+        if isinstance(value, str):
+            return any(value.casefold() == _value.casefold() for _value in self._value2member_map_)
+        return False
+
     def __getitem__(self: type[T], name: str) -> T:  # type: ignore[misc]
         if not isinstance(name, str):
             raise KeyError(name)
