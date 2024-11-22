@@ -81,10 +81,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: coverage.*
+          path: cov
           merge-multiple: true
 
       - name: Combine
-        run: pipx run coverage combine
+        run: pipx run coverage combine cov/
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
