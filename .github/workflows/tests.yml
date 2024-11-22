@@ -47,8 +47,7 @@ jobs:
 
       - name: Run tests and generate coverage
         run: |
-          uv run coverage run -m pytest -vv
-          uv run coverage xml -o coverage.${{ matrix.python-version }}.xml
+          uv run coverage run --parallel-mode -m pytest -vv
 
       - name: Show coverage report
         run: uv run coverage report -m
@@ -63,8 +62,8 @@ jobs:
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage.${{ matrix.python-version }}.xml
-          path: coverage.${{ matrix.python-version }}.xml
+          name: coverage.${{ matrix.python-version }}
+          path: .coverage.*
 
       - name: Upload distributions
         uses: actions/upload-artifact@v4
