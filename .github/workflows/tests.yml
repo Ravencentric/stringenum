@@ -76,6 +76,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install the project dependencies
+        run: uv sync --python 3.12
+
       - name: Download coverage data
         uses: actions/download-artifact@v4
         with:
@@ -84,10 +91,10 @@ jobs:
           merge-multiple: true
 
       - name: Combine
-        run: pipx run coverage combine cov/
+        run: uv run coverage combine cov/
 
       - name: Generate report
-        run: pipx run coverage xml
+        run: uv run coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
