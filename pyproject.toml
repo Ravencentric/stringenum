@@ -1,6 +1,6 @@
 [project]
 name = "stringenum"
-version = "0.4.0"
+version = "0.5.0"
 description = "A small, dependency-free library offering additional enum.StrEnum subclasses and a backport for older Python versions."
 authors = [{ name = "Ravencentric", email = "me@ravencentric.cc" }]
 readme = "README.md"
