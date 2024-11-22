@@ -48,7 +48,7 @@ jobs:
       - name: Run tests and generate coverage
         run: |
           uv run coverage run -m pytest -vv
-          uv run coverage xml -o 
+          uv run coverage xml -o coverage.${{ matrix.python-version }}.xml
 
       - name: Show coverage report
         run: uv run coverage report -m
