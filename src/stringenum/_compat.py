@@ -7,11 +7,12 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
 if sys.version_info >= (3, 12):  # pragma: no cover
-    from enum import EnumType, StrEnum
+    from enum import EnumMeta, StrEnum
 else:
-    from enum import Enum, EnumMeta
+    from enum import Enum
+    from enum import EnumMeta as _EnumMeta
 
-    class EnumType(EnumMeta):
+    class EnumMeta(_EnumMeta):
         # __contains__ was updated in 3.12 to no longer raise TypeError
         # https://docs.python.org/3/library/enum.html#enum.EnumType.__contains__
         # https://github.com/python/cpython/blob/09c240f20c47db126ad7e162df41e5c2596962d4/Lib/enum.py#L736-L751
@@ -26,7 +27,7 @@ else:
             return False
 
     # https://github.com/python/cpython/blob/09c240f20c47db126ad7e162df41e5c2596962d4/Lib/enum.py#L1352-L1383
-    class StrEnum(str, Enum, metaclass=EnumType):
+    class StrEnum(str, Enum, metaclass=EnumMeta):
         """Enum where members are also (and must be) strings."""
 
         def __new__(cls, *values: str) -> Self:
@@ -61,4 +62,4 @@ else:
             return name.lower()
 
 
-__all__ = ("EnumType", "StrEnum")
+__all__ = ("EnumMeta", "StrEnum")

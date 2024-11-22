@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from stringenum._compat import EnumType, StrEnum
+from stringenum._compat import EnumMeta, StrEnum
 
 if TYPE_CHECKING:
     from typing import TypeVar
 
     from typing_extensions import Self
 
-    T = TypeVar("T", bound=EnumType)
+    T = TypeVar("T", bound=EnumMeta)
 
 
 class DuplicateFreeStrEnum(StrEnum):
@@ -31,7 +31,7 @@ class DuplicateFreeStrEnum(StrEnum):
                 raise ValueError(msg)
 
 
-class _CaseInsensitiveGetItemAndContains(EnumType):
+class _CaseInsensitiveGetItemAndContains(EnumMeta):
     def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
         if isinstance(value, self):
             return True
@@ -64,7 +64,7 @@ class CaseInsensitiveStrEnum(DuplicateFreeStrEnum, metaclass=_CaseInsensitiveGet
         raise ValueError(msg)
 
 
-class _DoubleSidedGetItemAndContains(EnumType):
+class _DoubleSidedGetItemAndContains(EnumMeta):
     def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
         if isinstance(value, self):
             return True
@@ -102,7 +102,7 @@ class DoubleSidedStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItemAndC
         raise ValueError(msg)
 
 
-class _DoubleSidedCaseInsensitiveGetItemAndContains(EnumType):
+class _DoubleSidedCaseInsensitiveGetItemAndContains(EnumMeta):
     def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
         if isinstance(value, self):
             return True
