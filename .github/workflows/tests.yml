@@ -49,9 +49,6 @@ jobs:
         run: |
           uv run coverage run --parallel-mode -m pytest -vv
 
-      - name: debug
-        run: ls -1 -a
-
       - name: Build
         run: uv build
 
