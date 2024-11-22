@@ -27,7 +27,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  tests:
     name: Tests
     strategy:
       fail-fast: false
@@ -73,6 +73,7 @@ jobs:
           path: "dist/*"
 
   coverage:
+    needs: [tests]
     name: Coverage
     runs-on: ubuntu-latest
     steps:
