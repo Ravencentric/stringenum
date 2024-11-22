@@ -84,7 +84,7 @@ jobs:
           merge-multiple: true
 
       - name: Combine
-        run: coverage combine
+        run: pipx run coverage combine
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
