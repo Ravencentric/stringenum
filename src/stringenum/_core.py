@@ -12,6 +12,25 @@ if TYPE_CHECKING:
     T = TypeVar("T", bound=EnumType)
 
 
+class DuplicateFreeStrEnum(StrEnum):
+    """
+    A subclass of `StrEnum` that ensures all members have unique values and names,
+    raising a `ValueError` if duplicates are found.
+    """
+
+    def __init__(self, *args: object) -> None:
+        cls = self.__class__
+
+        for member in cls:
+            if self.value.casefold() == member.value.casefold():
+                msg = f"Duplicate values are not allowed in {self.__class__.__name__}: {self!r}"
+                raise ValueError(msg)
+
+            if self.name.casefold() == member.name.casefold():
+                msg = f"Duplicate names are not allowed in {self.__class__.__name__}: {self!r}"
+                raise ValueError(msg)
+
+
 class _CaseInsensitiveGetItemAndContains(EnumType):
     def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
         if isinstance(value, self):
@@ -30,8 +49,8 @@ class _CaseInsensitiveGetItemAndContains(EnumType):
         raise KeyError(name)
 
 
-class CaseInsensitiveStrEnum(StrEnum, metaclass=_CaseInsensitiveGetItemAndContains):
-    """A subclass of `StrEnum` that supports case-insensitive lookup."""
+class CaseInsensitiveStrEnum(DuplicateFreeStrEnum, metaclass=_CaseInsensitiveGetItemAndContains):
+    """A subclass of `DuplicateFreeStrEnum` that supports case-insensitive lookup."""
 
     @classmethod
     def _missing_(cls, value: object) -> Self:
@@ -43,25 +62,6 @@ class CaseInsensitiveStrEnum(StrEnum, metaclass=_CaseInsensitiveGetItemAndContai
                     return member
             raise ValueError(msg)
         raise ValueError(msg)
-
-
-class DuplicateFreeStrEnum(StrEnum):
-    """
-    A subclass of `StrEnum` that ensures all members have unique values and names,
-    raising a `ValueError` if duplicates are found.
-    """
-
-    def __init__(self, *args: object) -> None:
-        cls = self.__class__
-
-        for member in cls:
-            if self.value.casefold() == member.value.casefold():
-                msg = f"Duplicate values are not allowed in {self.__class__.__name__}: {self!r}"
-                raise ValueError(msg)
-
-            if self.name.casefold() == member.name.casefold():
-                msg = f"Duplicate names are not allowed in {self.__class__.__name__}: {self!r}"
-                raise ValueError(msg)
 
 
 class _DoubleSidedGetItemAndContains(EnumType):
@@ -107,8 +107,8 @@ class _DoubleSidedCaseInsensitiveGetItemAndContains(EnumType):
         if isinstance(value, self):
             return True
         if isinstance(value, str):
-            for name, member in self.__members__.items():  # type: ignore[attr-defined]
-                if (value.casefold() == name.casefold()) or (member.value.casefold() == member.value.casefold()):
+            for name, member in self._member_map_.items():
+                if (value.casefold() == name.casefold()) or (value.casefold() == member.value.casefold()):
                     return True
         return False
 

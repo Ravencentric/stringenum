@@ -45,6 +45,7 @@ def test_membership():
     assert "red" in Color
     assert "GREEN_GRASS" in Color
     assert "GREEN_grass" in Color
+    assert "pink" not in Color
     assert None not in Color
     assert object() not in Color
     assert 121212 not in Color
@@ -88,6 +89,14 @@ def test_value_error_on_invalid_lookup():
 
     with pytest.raises(ValueError):
         Color(None)
+
+
+def test_unique_on_each_side():
+    class ValidColor(DoubleSidedCaseInsensitiveStrEnum):
+        RED_COLOR = "RED_COLOR"
+        BLUE_SKY = "BLUE_SKY"
+
+    assert ValidColor.RED_COLOR is ValidColor.RED_COLOR
 
 
 def test_unique_values():

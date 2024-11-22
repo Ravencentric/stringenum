@@ -56,3 +56,38 @@ def test_invalid_enum_key():
 
     with pytest.raises(KeyError):
         Color[None]
+
+
+def test_unique_on_each_side():
+    class ValidColor(CaseInsensitiveStrEnum):
+        RED_COLOR = "RED_COLOR"
+        BLUE_SKY = "BLUE_SKY"
+
+    assert ValidColor.RED_COLOR is ValidColor.RED_COLOR
+
+
+def test_unique_values_case_insensitively():
+    with pytest.raises(ValueError):
+
+        class InvalidColor(CaseInsensitiveStrEnum):
+            RED_COLOR = "Red"
+            BLUE_SKY = "Blue"
+            BLUE_DUPLICATE = "blue"
+
+
+def test_unique_names():
+    with pytest.raises(TypeError):
+
+        class InvalidColor(CaseInsensitiveStrEnum):
+            RED = "Red"
+            BLUE = "Blue"
+            BLUE = "Green"
+
+
+def test_unique_names_case_insensitively():
+    with pytest.raises(ValueError):
+
+        class InvalidColor(CaseInsensitiveStrEnum):
+            RED = "Red"
+            BLUE = "Blue"
+            blue = "Green"

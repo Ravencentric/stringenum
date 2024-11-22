@@ -79,7 +79,20 @@ pip install stringenum
     False
     ```
 
-- `stringenum.CaseInsensitiveStrEnum` - A subclass of `StrEnum` that supports case-insensitive lookup.
+- `stringenum.DuplicateFreeStrEnum` - A subclass of `StrEnum` that ensures all members have unique values and names, raising a `ValueError` if duplicates are found.
+
+    ```py
+    >>> class Fruits(DuplicateFreeStrEnum):
+    ...     APPLE = "apple"
+    ...     BANANA = "banana"
+    ...     ORANGE = "apple"
+    ...
+    Traceback (most recent call last):
+      ...
+    ValueError: Duplicate values are not allowed in Fruits: <Fruits.ORANGE: 'apple'>
+    ```
+
+- `stringenum.CaseInsensitiveStrEnum` - A subclass of `DuplicateFreeStrEnum` that supports case-insensitive lookup.
 
     ```py
     >>> class Pet(CaseInsensitiveStrEnum):
@@ -97,19 +110,6 @@ pip install stringenum
 
     >>> Pet["dog"] 
     <Pet.DOG: 'bark'>
-    ```
-
-- `stringenum.DuplicateFreeStrEnum` - A subclass of `StrEnum` that ensures all members have unique values and names, raising a `ValueError` if duplicates are found.
-
-    ```py
-    >>> class Fruits(DuplicateFreeStrEnum):
-    ...     APPLE = "apple"
-    ...     BANANA = "banana"
-    ...     ORANGE = "apple"
-    ...
-    Traceback (most recent call last):
-      ...
-    ValueError: Duplicate values are not allowed in Fruits: <Fruits.ORANGE: 'apple'>
     ```
 
 - `stringenum.DoubleSidedStrEnum` - A subclass of `DuplicateFreeStrEnum` that supports double-sided lookup, allowing both member values and member names to be used for lookups.
