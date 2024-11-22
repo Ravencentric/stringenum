@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     T = TypeVar("T", bound=EnumType)
 
 
-class _CaseInsensitiveGetItem(EnumType):
+class _CaseInsensitiveGetItemAndContains(EnumType):
     def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
         if isinstance(value, self):
             return True
@@ -30,7 +30,7 @@ class _CaseInsensitiveGetItem(EnumType):
         raise KeyError(name)
 
 
-class CaseInsensitiveStrEnum(StrEnum, metaclass=_CaseInsensitiveGetItem):
+class CaseInsensitiveStrEnum(StrEnum, metaclass=_CaseInsensitiveGetItemAndContains):
     """A subclass of `StrEnum` that supports case-insensitive lookup."""
 
     @classmethod
