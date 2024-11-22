@@ -48,7 +48,7 @@ jobs:
       - name: Run tests and generate coverage
         run: |
           uv run coverage run -m pytest -vv
-          uv run coverage xml
+          uv run coverage xml -o 
 
       - name: Show coverage report
         run: uv run coverage report -m
@@ -59,15 +59,35 @@ jobs:
       - name: Get version
         id: version
         run: echo "version=$(uv run python -c 'import stringenum; print(stringenum.__version__)')" >> $GITHUB_OUTPUT
+      
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage.${{ matrix.python-version }}.xml
+          path: coverage.${{ matrix.python-version }}.xml
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
         with:
           name: stringenum-${{ steps.version.outputs.version }}-py${{ matrix.python-version }}
           path: "dist/*"
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download coverage data
+        uses: actions/download-artifact@v4
         with:
-          env_vars: OS,PYTHON
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
+          pattern: coverage.*
+          merge-multiple: true
+
+      - name: debug
+        run: tree
+
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v5
+      #   with:
+      #     env_vars: OS,PYTHON
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     verbose: true
