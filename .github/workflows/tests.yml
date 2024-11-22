@@ -50,6 +50,9 @@ jobs:
           uv run coverage run -m pytest -vv
           uv run coverage xml
 
+      - name: Show coverage report
+        run: uv run coverage report -m
+
       - name: Build
         run: uv build
 
