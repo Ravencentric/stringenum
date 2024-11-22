@@ -83,6 +83,9 @@ jobs:
       - name: Combine
         run: pipx run coverage combine cov/
 
+      - name: Generate report
+        run: pipx run coverage report xml
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
