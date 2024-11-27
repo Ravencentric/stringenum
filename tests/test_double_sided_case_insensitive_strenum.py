@@ -11,7 +11,7 @@ class Color(DoubleSidedCaseInsensitiveStrEnum):
     GREEN_GRASS = "Green"
 
 
-def test_case_insensitive_getitem_by_name():
+def test_case_insensitive_getitem_by_name() -> None:
     assert Color["RED_COLOR"] is Color.RED_COLOR
     assert Color["red_color"] is Color.RED_COLOR
     assert Color["ReD_CoLoR"] is Color.RED_COLOR
@@ -25,7 +25,7 @@ def test_case_insensitive_getitem_by_name():
     assert Color["GreEn_GrAsS"] is Color.GREEN_GRASS
 
 
-def test_case_insensitive_getitem_by_value():
+def test_case_insensitive_getitem_by_value() -> None:
     assert Color["Red"] is Color.RED_COLOR
     assert Color["red"] is Color.RED_COLOR
     assert Color["ReD"] is Color.RED_COLOR
@@ -39,7 +39,7 @@ def test_case_insensitive_getitem_by_value():
     assert Color["GreEn"] is Color.GREEN_GRASS
 
 
-def test_membership():
+def test_membership() -> None:
     assert Color.RED_COLOR in Color
     assert "Red" in Color
     assert "red" in Color
@@ -51,7 +51,7 @@ def test_membership():
     assert 121212 not in Color
 
 
-def test_case_insensitive_invalid_key():
+def test_case_insensitive_invalid_key() -> None:
     with pytest.raises(KeyError):
         Color["YELLOW"]
 
@@ -59,10 +59,10 @@ def test_case_insensitive_invalid_key():
         Color["yElLoW"]
 
     with pytest.raises(KeyError):
-        Color[None]
+        Color[None]  # type: ignore[misc]
 
 
-def test_case_insensitive_lookup_by_name():
+def test_case_insensitive_lookup_by_name() -> None:
     assert Color("red_Color") is Color.RED_COLOR
     assert Color("red_color") is Color.RED_COLOR
     assert Color("blue_SKY") is Color.BLUE_SKY
@@ -71,7 +71,7 @@ def test_case_insensitive_lookup_by_name():
     assert Color("green_grass") is Color.GREEN_GRASS
 
 
-def test_case_insensitive_lookup_by_value():
+def test_case_insensitive_lookup_by_value() -> None:
     assert Color("red") is Color.RED_COLOR
     assert Color("RED") is Color.RED_COLOR
     assert Color("blue") is Color.BLUE_SKY
@@ -80,7 +80,7 @@ def test_case_insensitive_lookup_by_value():
     assert Color("GREEN") is Color.GREEN_GRASS
 
 
-def test_value_error_on_invalid_lookup():
+def test_value_error_on_invalid_lookup() -> None:
     with pytest.raises(ValueError):
         Color("YELLOW")
 
@@ -91,7 +91,7 @@ def test_value_error_on_invalid_lookup():
         Color(None)
 
 
-def test_unique_on_each_side():
+def test_unique_on_each_side() -> None:
     class ValidColor(DoubleSidedCaseInsensitiveStrEnum):
         RED_COLOR = "RED_COLOR"
         BLUE_SKY = "BLUE_SKY"
@@ -99,7 +99,7 @@ def test_unique_on_each_side():
     assert ValidColor.RED_COLOR is ValidColor.RED_COLOR
 
 
-def test_unique_values():
+def test_unique_values() -> None:
     with pytest.raises(ValueError):
 
         class InvalidColor(DoubleSidedCaseInsensitiveStrEnum):
@@ -108,7 +108,7 @@ def test_unique_values():
             BLUE_DUPLICATE = "Blue"
 
 
-def test_unique_values_case_insensitively():
+def test_unique_values_case_insensitively() -> None:
     with pytest.raises(ValueError):
 
         class InvalidColor(DoubleSidedCaseInsensitiveStrEnum):
@@ -117,16 +117,16 @@ def test_unique_values_case_insensitively():
             BLUE_DUPLICATE = "blue"
 
 
-def test_unique_names():
+def test_unique_names() -> None:
     with pytest.raises(TypeError):
 
         class InvalidColor(DoubleSidedCaseInsensitiveStrEnum):
             RED = "Red"
             BLUE = "Blue"
-            BLUE = "Green"
+            BLUE = "Green"  # type: ignore[misc]
 
 
-def test_unique_names_case_insensitively():
+def test_unique_names_case_insensitively() -> None:
     with pytest.raises(ValueError):
 
         class InvalidColor(DoubleSidedCaseInsensitiveStrEnum):

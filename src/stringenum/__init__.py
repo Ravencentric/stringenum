@@ -11,10 +11,10 @@ from stringenum._core import (
 __version__ = "0.5.0"
 
 __all__ = (
-    "StrEnum",
     "CaseInsensitiveStrEnum",
     "DoubleSidedCaseInsensitiveStrEnum",
     "DoubleSidedStrEnum",
     "DuplicateFreeStrEnum",
+    "StrEnum",
     "__version__",
 )

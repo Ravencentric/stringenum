@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from stringenum._compat import EnumMeta, StrEnum
 
@@ -32,7 +32,7 @@ class DuplicateFreeStrEnum(StrEnum):
 
 
 class _CaseInsensitiveGetItemAndContains(EnumMeta):
-    def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
+    def __contains__(self: type[Any], value: object) -> bool:
         if isinstance(value, self):
             return True
         if isinstance(value, str):
@@ -65,7 +65,7 @@ class CaseInsensitiveStrEnum(DuplicateFreeStrEnum, metaclass=_CaseInsensitiveGet
 
 
 class _DoubleSidedGetItemAndContains(EnumMeta):
-    def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
+    def __contains__(self: type[Any], value: object) -> bool:
         if isinstance(value, self):
             return True
         if isinstance(value, str):
@@ -103,7 +103,7 @@ class DoubleSidedStrEnum(DuplicateFreeStrEnum, metaclass=_DoubleSidedGetItemAndC
 
 
 class _DoubleSidedCaseInsensitiveGetItemAndContains(EnumMeta):
-    def __contains__(self: type[T], value: object) -> bool:  # type: ignore[misc]
+    def __contains__(self: type[Any], value: object) -> bool:
         if isinstance(value, self):
             return True
         if isinstance(value, str):
