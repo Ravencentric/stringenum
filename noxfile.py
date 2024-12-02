@@ -3,16 +3,22 @@ from __future__ import annotations
 import nox
 
 nox.needs_version = ">=2024.10.9"
-nox.options.default_venv_backend = "uv|virtualenv"
+nox.options.default_venv_backend = "uv"
 
 
-def dev_group() -> list[str]:
-    return nox.project.load_toml("pyproject.toml")["dependency-groups"]["dev"]  # type: ignore[no-any-return]
+def install(session: nox.Session) -> None:
+    """Install the current project."""
+    session.run_install(
+        "uv",
+        "sync",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+        silent=True,
+    )
 
 
 @nox.session
 def lint(session: nox.Session) -> None:
-    session.install(".", *dev_group(), silent=True)
+    install(session)
     session.run("ruff", "check", ".", "--fix")
     session.run("ruff", "format", ".")
     session.run("mypy", ".")
@@ -20,13 +26,13 @@ def lint(session: nox.Session) -> None:
 
 @nox.session(python=["3.9", "3.10", "3.11", "3.12", "3.13"])
 def test(session: nox.Session) -> None:
-    session.install(".", *dev_group(), silent=True)
+    install(session)
     session.run("coverage", "run", "-m", "pytest", "-vv", *session.posargs)
 
 
 @nox.session
 def coverage(session: nox.Session) -> None:
-    session.install(".", *dev_group(), silent=True)
+    install(session)
     session.run("coverage", "combine")
     session.run("coverage", "report", "-m")
     session.run("coverage", "xml")
