@@ -50,18 +50,13 @@ required-imports = ["from __future__ import annotations"]
 strict = true
 pretty = true
 enable_error_code = ["ignore-without-code"]
-exclude = "tests/"
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config", "--strict-markers"]
 
 [tool.coverage.run]
 branch = true
-parallel = true
 source_pkgs = ["stringenum"]
-omit = [
-    "tests/*"
-]
 
 [tool.coverage.paths]
 source = ["src/stringenum/", ".nox/*/Lib/site-packages/stringenum/"]

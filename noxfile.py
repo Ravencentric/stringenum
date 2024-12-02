@@ -29,7 +29,8 @@ def lint(session: nox.Session) -> None:
 def test(session: nox.Session) -> None:
     """Run tests."""
     install(session)
-    session.run("coverage", "run", "-m", "pytest", "-vv", *session.posargs)
+    datafile = f".coverage.{session.python}"
+    session.run("coverage", "run", f"--data-file={datafile}", "-m", "pytest", "-vv", *session.posargs)
 
 
 @nox.session
