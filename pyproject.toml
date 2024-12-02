@@ -27,7 +27,6 @@ dev = [
     "coverage>=7.6.7",
     "mypy>=1.13.0",
     "nox>=2024.10.9",
-    "pytest-cov>=6.0.0",
     "pytest>=8.3.3",
     "ruff>=0.8.0",
     "tomli>=2.1.0",
@@ -53,12 +52,19 @@ pretty = true
 enable_error_code = ["ignore-without-code"]
 exclude = "tests/"
 
+[tool.pytest.ini_options]
+addopts = ["--strict-config", "--strict-markers"]
+
 [tool.coverage.run]
 branch = true
+parallel = true
 source_pkgs = ["stringenum"]
 omit = [
     "tests/*"
 ]
+
+[tool.coverage.paths]
+source = ["src/stringenum/", ".nox/*/Lib/site-packages/stringenum/"]
 
 [tool.coverage.report]
 exclude_also = [

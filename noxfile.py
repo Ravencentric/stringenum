@@ -21,4 +21,12 @@ def lint(session: nox.Session) -> None:
 @nox.session(python=["3.9", "3.10", "3.11", "3.12", "3.13"])
 def test(session: nox.Session) -> None:
     session.install(".", *dev_group(), silent=True)
-    session.run("coverage", "run", "--source=stringenum", "--parallel", "-m", "pytest", "-vv", *session.posargs)
+    session.run("coverage", "run", "-m", "pytest", "-vv", *session.posargs)
+
+
+@nox.session
+def coverage(session: nox.Session) -> None:
+    session.install(".", *dev_group(), silent=True)
+    session.run("coverage", "combine")
+    session.run("coverage", "report", "-m")
+    session.run("coverage", "xml")

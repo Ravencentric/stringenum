@@ -9,12 +9,9 @@ jobs:
   tests:
     name: Tests
     uses: ./.github/workflows/tests.yml
-  lint:
-    name: Lint
-    uses: ./.github/workflows/lint-and-type-check.yml
   release:
     name: Release
-    needs: [tests, lint]
+    needs: [tests]
     environment:
       name: release
       url: https://pypi.org/project/stringenum/
@@ -29,12 +26,13 @@ jobs:
         with:
           fetch-depth: 0 # Important for changelog
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
       - name: Install uv
         id: setup-uv
         uses: astral-sh/setup-uv@v4
-
-      - name: Install Python 3.12
-        run: uv python install 3.12
 
       - name: Build
         run: |
@@ -63,4 +61,3 @@ jobs:
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-
