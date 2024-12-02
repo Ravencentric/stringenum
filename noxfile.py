@@ -18,6 +18,7 @@ def install(session: nox.Session) -> None:
 
 @nox.session
 def lint(session: nox.Session) -> None:
+    """Run ruff and mypy."""
     install(session)
     session.run("ruff", "check", ".", "--fix")
     session.run("ruff", "format", ".")
@@ -26,12 +27,14 @@ def lint(session: nox.Session) -> None:
 
 @nox.session(python=["3.9", "3.10", "3.11", "3.12", "3.13"])
 def test(session: nox.Session) -> None:
+    """Run tests."""
     install(session)
     session.run("coverage", "run", "-m", "pytest", "-vv", *session.posargs)
 
 
 @nox.session
 def coverage(session: nox.Session) -> None:
+    """Generate and report coverage."""
     install(session)
     session.run("coverage", "combine")
     session.run("coverage", "report", "-m")
