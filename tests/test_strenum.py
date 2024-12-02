@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import auto
+from typing import cast
 
 import pytest
 
@@ -28,7 +29,7 @@ class Fruit(StrEnum):
 
 
 def test_color_values() -> None:
-    assert Color.RED.value == "red"
+    assert cast(str, Color.RED.value) == "red"
     assert Color.GREEN.value == "green"
     assert Color.BLUE.value == "blue"
 
