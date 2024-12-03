@@ -1,9 +1,16 @@
 from __future__ import annotations
 
+import os
+
 import nox
 
 nox.needs_version = ">=2024.10.9"
 nox.options.default_venv_backend = "uv"
+
+PYTHON_VERSIONS = ("3.9", "3.10", "3.11", "3.12", "3.13")
+
+# https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+CI = True if os.getenv("CI") == "true" else False
 
 
 def install(session: nox.Session) -> None:
@@ -17,16 +24,29 @@ def install(session: nox.Session) -> None:
 
 
 @nox.session
-def lint(session: nox.Session) -> None:
-    """Run ruff and mypy."""
+def ruff(session: nox.Session) -> None:
+    """Run ruff."""
     install(session)
-    session.run("ruff", "check", ".", "--fix")
-    session.run("ruff", "format", ".")
+
+    if CI:
+        # Do not modify files in CI, simply fail.
+        session.run("ruff", "check", ".")
+        session.run("ruff", "format", ".", "--check")
+    else:
+        # Fix any fixable errors if running locally.
+        session.run("ruff", "check", ".", "--fix")
+        session.run("ruff", "format", ".")
+
+
+@nox.session(python=PYTHON_VERSIONS)
+def mypy(session: nox.Session) -> None:
+    """Run mypy."""
+    install(session)
     session.run("mypy", ".")
 
 
-@nox.session(python=["3.9", "3.10", "3.11", "3.12", "3.13"])
-def test(session: nox.Session) -> None:
+@nox.session(python=PYTHON_VERSIONS)
+def pytest(session: nox.Session) -> None:
     """Run tests."""
     install(session)
     datafile = f".coverage.{session.python}"
