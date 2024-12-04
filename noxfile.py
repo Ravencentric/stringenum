@@ -42,7 +42,7 @@ def ruff(session: nox.Session) -> None:
 def mypy(session: nox.Session) -> None:
     """Run mypy."""
     install(session)
-    session.run("mypy", ".")
+    session.run("mypy")
 
 
 @nox.session(python=PYTHON_VERSIONS)
