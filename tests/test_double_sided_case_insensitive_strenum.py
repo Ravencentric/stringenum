@@ -88,7 +88,7 @@ def test_value_error_on_invalid_lookup() -> None:
         Color("yellow")
 
     with pytest.raises(ValueError):
-        Color(None) # type: ignore[arg-type]
+        Color(None)  # type: ignore[arg-type]
 
 
 def test_unique_on_each_side() -> None:

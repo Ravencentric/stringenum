@@ -47,7 +47,7 @@ def test_invalid_enum_value() -> None:
         Color("invalid_color")
 
     with pytest.raises(ValueError):
-        Color(None) # type: ignore[arg-type]
+        Color(None)  # type: ignore[arg-type]
 
 
 def test_invalid_enum_key() -> None:
