@@ -18,7 +18,7 @@ class DuplicateFreeStrEnum(StrEnum):
     raising a `ValueError` if duplicates are found.
     """
 
-    def __init__(self, *args: object) -> None:
+    def __init__(self, *args: str) -> None:
         cls = self.__class__
 
         for member in cls:
