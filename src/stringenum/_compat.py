@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from typing_extensions import Self
 
-if sys.version_info >= (3, 12):  # pragma: no cover
+if sys.version_info >= (3, 12):
     from enum import EnumMeta, StrEnum
 else:
     from enum import Enum
