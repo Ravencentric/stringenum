@@ -9,15 +9,13 @@ nox.options.default_venv_backend = "uv"
 
 PYTHON_VERSIONS = ("3.9", "3.10", "3.11", "3.12", "3.13")
 
-# https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
-CI = True if os.getenv("CI") is not None else False
-
 
 def install(session: nox.Session) -> None:
     """Install the current project."""
     session.run_install(
         "uv",
         "sync",
+        "--locked",
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
         silent=True,
     )
@@ -28,7 +26,7 @@ def ruff(session: nox.Session) -> None:
     """Run ruff."""
     install(session)
 
-    if CI:
+    if os.getenv("CI"):
         # Do not modify files in CI, simply fail.
         session.run("ruff", "check", ".")
         session.run("ruff", "format", ".", "--check")
