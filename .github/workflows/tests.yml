@@ -59,7 +59,7 @@ jobs:
         run: echo "version=$(uv run python -c 'import stringenum; print(stringenum.__version__)')" >> $GITHUB_OUTPUT
       
       - name: Upload distributions
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: stringenum-${{ steps.version.outputs.version }}
           path: "dist/*"
